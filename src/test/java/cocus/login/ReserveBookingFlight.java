@@ -27,14 +27,14 @@ public class ReserveBookingFlight {
     @BeforeClass
     public void BeforeClass(){
         WebDriverManager.firefoxdriver().setup();
-
+        // create an object of GenerateRandom class that was created by me and includes some generating code method
         GenerateRandom generateRandom = new GenerateRandom();
         personalinfofirstname = generateRandom.RandomAlpha();
         personalinfolastname = generateRandom.RandomAlpha();
         traveller1firstname = generateRandom.RandomAlpha();
         traveller1lastname = generateRandom.RandomAlpha();
         bookemail = personalinfofirstname+"@phptravels.com";
-
+        //Random class used to generate a stream of numbers
         Random random = new Random();
         bookphone = String.valueOf((int) Math.round(random.nextFloat() * Math.pow(10,12)));
 
@@ -47,9 +47,10 @@ public class ReserveBookingFlight {
         driver.get("https://www.phptravels.net/flights");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.manage().window().maximize();
+
         driver.findElement(By.id("round-trip")).click();
 
-        //this is how I handle the Autosuggestive dropdown
+        //this is how I handle the Autosuggestion dropdown
         driver.findElement(By.name("from")).sendKeys("beirut");
         //I get all the elements that filtered my search criteria and add them to a list
         List<WebElement> fromcountryoptions = driver.findElements(By.className("autocomplete-location"));
@@ -62,7 +63,7 @@ public class ReserveBookingFlight {
                 break;
             }
         }
-        //this is how I handle the Autosuggestive dropdown
+        //this is how I handle the Autosuggestion dropdown
         driver.findElement(By.name("to")).sendKeys("porto");
         //I get all the elements that filtered my search criteria and add them to a list
         List<WebElement> tocountryoptions = driver.findElements(By.className("autocomplete-location"));
@@ -75,13 +76,13 @@ public class ReserveBookingFlight {
                 break;
             }
         }
-        //I use this primitive way to avoid writing additional libne of codes
+        //I use this primitive way to avoid writing additional line of codes
         driver.findElement(By.id("departure")).clear();
         driver.findElement(By.id("departure")).sendKeys("30-04-2022");
         driver.findElement(By.id("return")).clear();
         driver.findElement(By.id("return")).sendKeys("10-05-2022");
         driver.findElement(By.xpath("//*[@id=\"flights-search\"]/span[1]")).click();
-        //Explixit wait until the visibility of the below clickable option
+        //Explicit wait until the visibility of the below clickable option
         WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\\\"fadein\\\"]/main/div/div[1]/div/form/div[2]/div/div/div/div[1]/div/div\" +\n" +
                 "                \"/fieldset/ul/li[3]/div/label")));
@@ -94,6 +95,8 @@ public class ReserveBookingFlight {
         //using Actions class to drag the price range
         Actions actions = new Actions(driver);
         actions.dragAndDropBy(slider,-200,200).release().build().perform();
+        // I know that it is not recommended to use Thread.sleep in automation
+        //especially that we have implicit and explicit wait. but sometimes it will help.
         Thread.sleep(1000);
         driver.findElement(By.xpath("//*[@id=\"data\"]/ul/li[1]/div/form/div/div[2]/div/button")).click();
 
@@ -111,31 +114,31 @@ public class ReserveBookingFlight {
                 "/div/div/div/span/span[1]/span")).click();
         driver.findElement(By.className("select2-search__field")).sendKeys("Lebanon");
         driver.findElement(By.className("select2-search__field")).sendKeys(Keys.ENTER);
-
+        // script to scroll down
         JavascriptExecutor js = (JavascriptExecutor)driver;
         js.executeScript("window.scrollBy(0,400)");
         Thread.sleep(500);
 
         driver.findElement(By.name("firstname_1")).sendKeys(personalinfofirstname);
         driver.findElement(By.name("lastname_1")).sendKeys(personalinfolastname);
-        //here I use Select class that allows me to select an element from a deop down
+        //here I use Select class that allows me to select an element from a drop down
         WebElement nationalityDropDown = driver.findElement(By.name("nationality_1"));
         Select nationality = new Select(nationalityDropDown);
         nationality.selectByValue("LB");
-        //here I use Select class that allows me to select an element from a deop down
+        //here I use Select class that allows me to select an element from a drop down
         WebElement monthDropDown = driver.findElement(By.name("dob_month_1"));
         Select month = new Select(monthDropDown);
         month.selectByValue("03");
-        //here I use Select class that allows me to select an element from a deop down
+        //here I use Select class that allows me to select an element from a drop down
         WebElement dayDropDown = driver.findElement(By.name("dob_day_1"));
         Select day = new Select(dayDropDown);
         day.selectByValue("2");
-        //here I use Select class that allows me to select an element from a deop down
+        //here I use Select class that allows me to select an element from a drop down
         WebElement yearDropDown = driver.findElement(By.name("dob_year_1"));
         Select year = new Select(yearDropDown);
         year.selectByValue("1982");
 
-
+        //script to scroll down
         js.executeScript("window.scrollBy(0,400)");
         Thread.sleep(500);
 
@@ -165,18 +168,9 @@ public class ReserveBookingFlight {
         WebElement passportExpiryYearDrop = driver.findElement(By.name("passport_year_1"));
         Select passportExpiryYear = new Select(passportExpiryYearDrop);
         passportExpiryYear.selectByValue("2030");
-
-
+        // script for scroll down
         js.executeScript("window.scrollBy(0,200)");
         Thread.sleep(500);
-
-
-
-
-
-
-
-
 
     }
 
