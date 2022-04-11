@@ -3,6 +3,8 @@ package cocus.login;
 import common.GenerateRandom;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.*;
@@ -10,11 +12,14 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import java.time.Duration;
 import java.util.Random;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.BeforeTest;
 
 //I write my below scripts to simulate E2E testing scenarios, from signup to login
 public class SignUpLoginE2E {
 
     WebDriver driver;
+    String baseurl = "https://www.phptravels.net/";
     String firstname;
     String lastname;
     String phonenumber;
@@ -24,10 +29,9 @@ public class SignUpLoginE2E {
     String password;
     String welcomeMessage;
 
+
     @BeforeClass
     public void BeforeClass(){
-
-        WebDriverManager.firefoxdriver().setup();
 
         //create an object of GenerateRandom class which is created by me and contains several useful methods
         GenerateRandom generateRandom = new GenerateRandom();
@@ -46,10 +50,12 @@ public class SignUpLoginE2E {
     @Test(priority = 0)
     public void SignUp() throws InterruptedException {
 
+        WebDriverManager.firefoxdriver().setup();
         driver = new FirefoxDriver();
-        driver.get("https://www.phptravels.net/login");
+        driver.get(baseurl+"login");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.manage().window().maximize();
+
         driver.findElement(By.cssSelector("a.theme-btn:nth-child(5)")).click();
         driver.findElement(By.name("first_name")).sendKeys(firstname);
         driver.findElement(By.name("last_name")).sendKeys(lastname);
@@ -75,10 +81,12 @@ public class SignUpLoginE2E {
     @Test(priority = 1)
     public void SuccessfulLogin() throws InterruptedException {
 
+        WebDriverManager.firefoxdriver().setup();
         driver = new FirefoxDriver();
-        driver.get("https://www.phptravels.net/login");
+        driver.get(baseurl+"login");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.manage().window().maximize();
+
         driver.findElement(By.name("email")).sendKeys(email);
         driver.findElement(By.name("password")).sendKeys(password);
         driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[2]/div/form/div[3]/button/span[1]")).click();
@@ -92,17 +100,20 @@ public class SignUpLoginE2E {
     //the below test script is for an attempt to login from a user does not exist
     @Test(priority = 2)
     public void UnsuccessfulLogin() throws InterruptedException {
-
+        WebDriverManager.firefoxdriver().setup();
         driver = new FirefoxDriver();
-        driver.get("https://www.phptravels.net/login");
+        driver.get(baseurl+"login");
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.manage().window().maximize();
+
         driver.findElement(By.name("email")).sendKeys("user@user.com");
         driver.findElement(By.name("password")).sendKeys("demouser");
         driver.findElement(By.xpath("/html/body/div[1]/div/div[2]/div[2]/div/form/div[3]/button/span[1]")).click();
+        //this is how I locate the toast message and parse it to validate later if displayed or not
         signInToastText= driver.findElement(By.className("alert-danger")).getText();
         System.out.println(signInToastText);
+        //Assert function to ensure that the user does not login as expected
         Assert.assertEquals(signInToastText,"Wrong credentials. try again!");
-        driver.close();
+        driver.quit();
     }
 }

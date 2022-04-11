@@ -10,4 +10,5 @@
             <class name="cocus.login.ReserveBookingFlight" />
         </classes>
     </test>
+
 </suite>

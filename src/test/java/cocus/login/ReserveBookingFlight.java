@@ -172,6 +172,9 @@ public class ReserveBookingFlight {
         js.executeScript("window.scrollBy(0,200)");
         Thread.sleep(500);
 
+        // in the below should be the remaining code to complete the booking flow, but due to the frequent error
+        //occurring on the phptravel.net I could not continue :(
+
     }
 
 
